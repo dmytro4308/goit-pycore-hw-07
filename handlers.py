@@ -15,10 +15,14 @@ def add_contact(args, book):
     return message
 
 @input_error
-def edit_contact(args, contacts):
-    name, phone = args
-    contacts[name] = phone
-    return "Contact changed."
+def edit_contact(args, book: AddressBook):
+    name, old_phone, new_phone, *_ = args
+    record = book.find(name)
+    if record is None:
+        return "Contact not found."
+    if not record.edit_phone(old_phone, new_phone):
+        return f"Phone number {old_phone} not found for contact {name}."
+    return f"Phone number updated for contact {name}."
 
 @input_error
 def get_contact(args, contacts):
